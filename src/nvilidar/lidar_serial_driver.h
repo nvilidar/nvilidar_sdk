@@ -19,7 +19,7 @@ typedef void* (* pFUNC)(void *);
 #endif
 
 //雷达配置参数
-typedef struct
+struct  PackageConfigTypeDef
 {
     uint8_t     IsSingleChannel;         //单通道通信
     uint8_t     IsHasSensitive;         //有信号质量信息
@@ -28,26 +28,26 @@ typedef struct
     int16_t     angleOffset;            //角度偏移x64
     uint8_t     trailingLevel;          //拖尾等级
     device_info lidar_device_info;      //雷达设备信息
-}PackageConfigTypeDef;
+}__attribute__((packed));
 
 //雷达信息
-typedef struct
+struct PackageStateTypeDef
 {
     bool m_SerialOpen;              //串口开启标记
     bool m_Scanning;                //正在扫描出图
     uint8_t last_device_byte;       //上包接到的字节信息
-}PackageStateTypeDef;
+}__attribute__((packed));
 
 //共用体
-typedef union
+union PackageBufTypeDef
 {
     uint8_t buf[1200];
     node_package_qua        pack_qua;
     node_package_no_qua     pack_no_qua;
-}PackageBufTypeDef;
+}__attribute__((packed));
 
 //包信息
-typedef struct
+struct PackageInfoTypeDef
 {
      uint16_t packageIndex;         //单包采样点索引位置信息
      PackageBufTypeDef  packageBuffer;    //包信息（实际内容）
@@ -67,8 +67,7 @@ typedef struct
      bool     packageHas0CFirst;    //第一个字节 判断是否是0度角
      bool     packageHasTempFirst;  //第一个字节 判断是否为温度信息
      uint16_t  package0CIndex;      //0度角索引（目前协议为非单独封包）
-     std::vector<node_info> packagePointList;    //一包数据点的列表信息
-}PackageInfoTypeDef;
+} __attribute__((packed));
 
 
 
@@ -124,7 +123,7 @@ public:
     //获取接最后包的时间
     virtual uint32_t getPackageTime();              //获取当前整包传送的时间
     //获取0度已传输时间
-    virtual uint32_t getZeroTransTime();            //获取0度点的传输时间
+    virtual uint32_t getZeroIndex();                //获取0度索引 
 private:
     result_t SendSerial(const uint8_t *data, size_t size);     //发送串口接口  私有类
     result_t RecvSerial(const uint8_t *data, size_t size);     //接收串口数据  私有类
@@ -155,8 +154,9 @@ private:
 
     uint32_t    m_packageTime = 0;          //一包数据的传输时间
     uint32_t    m_pointTime = 0;            //2个雷达点的时间间隔
-    uint32_t    m_byte_trans_delay = 0;     //串口传输一个byte时间
-    uint32_t    m_zeroTransTime = 0;        //0度角传输的时间（由于0度非单独分包，所以需要得到算到0度到包守成已用的时间）
+    uint32_t    m_0cIndex = 0;              //0度所用的index
+    int32_t    m_last0cIndex = 0;              //0度所用的index
+    uint32_t    m_differ0cIndex = 0;              //0度所用的index
     bool        m_first_circle_finish = false;  //first circle finish,case calc fault
 };
 }
