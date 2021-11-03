@@ -11,8 +11,8 @@ How to build NVILIDAR SDK samples
     $ cd ..
     $ mkdir build
     $ cd build
-    $ cmake ../sdk
-    $ make					#linux
+    $ cmake ../nvilidar_sdk
+    $ make			#linux
     $ vs open Project.sln	#windows
     
 How to run NVILIDAR SDK samples
