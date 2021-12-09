@@ -41,7 +41,6 @@ You should see NVILIDAR's scan result in the console:
 	lidar sesitive :no
 	lidar trail filter level :6
 	[NVILidar]: [NVILIDAR INFO] Now NVILIDAR is scanning ......
-	[NVILidar]: Scan received[1635574574639575200]: 95 ranges is [212.765961]Hz
 	[NVILidar]: Scan received[1635574574652212200]: 2614 ranges is [7.654038]Hz
 	[NVILidar]: Scan received[1635574574791518000]: 2079 ranges is [9.624639]Hz
 	[NVILidar]: Scan received[1635574574893106000]: 2021 ranges is [9.900990]Hz
