@@ -8,7 +8,7 @@
 //其它
 #define DEFAULT_TIMEOUT     2000    //默认超时时间
 
-#define NVILIDAR_SDKVerision     "1.0.1"
+#define NVILIDAR_SDKVerision     "1.0.2"
 
 //数据模式
 typedef void* (* pFUNC)(void *);
