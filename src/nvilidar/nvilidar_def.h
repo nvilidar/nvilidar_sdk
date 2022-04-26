@@ -9,7 +9,7 @@
 //======================================基本参数类型定义============================================ 
 
 //SDK版本号 
-#define NVILIDAR_SDKVerision     "1.0.2"
+#define NVILIDAR_SDKVerision     "1.0.6"
 
 //PI def
 #ifndef M_PI
@@ -87,6 +87,10 @@ struct  Nvilidar_UserConfigTypeDef
 	bool 		resolution_fixed;		//是否固定角分辨率 
 	Nvilidar_DeviceInfo			deviceInfo;	//数据信息 
 	Nvilidar_StoreConfigTypeDef	storePara;	//存储的参数信息 
+
+	bool 		filter_jump_enable;		//是否允许过滤 
+	int 		filter_jump_value_min;	//过滤点最小值 
+	int 		filter_jump_value_max;	//过滤点最大值 
 };
 
 //共用体
@@ -105,7 +109,7 @@ typedef struct
 	bool     packageErrFlag;       //包错误标记信息
 	uint16_t packageCheckSumGet;   //校验值获取
 	uint16_t packageCheckSumCalc;  //校验值计算
-	uint8_t  packageFreq;          //雷达转速信息
+	uint16_t  packageFreq;          //雷达转速信息
 	int16_t  packageTemp;          //雷达温度信息
 	uint32_t packagePointTime;     //2点时间间隔
 	uint16_t packageFirstAngle;    //起始采样角

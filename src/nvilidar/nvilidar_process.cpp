@@ -173,6 +173,10 @@ namespace nvilidar
 		cfg.angle_offset = 0.0;				//角度偏移 
 		cfg.single_channel = false;			//单通道 
 		cfg.ignore_array_string = "";				//过滤部分角度信息 
+		//过滤点信息 
+		cfg.filter_jump_enable = true;		//使能跳动点过滤 
+		cfg.filter_jump_value_min = 3;		//跳动点最小过滤值 
+		cfg.filter_jump_value_max = 25;		//跳动点最大过滤值 
 
 		LidarParaSync(cfg);
 	}
@@ -266,6 +270,23 @@ namespace nvilidar
 		lidar_net_cfg.LidarNetConfigDisConnect();
 
 		return true;
+	}
+
+	//=============================ROS预留接口 重新加载参数========================================================
+	void LidarProcess::LidarReloadPara(Nvilidar_UserConfigTypeDef cfg)
+	{
+		LidarParaSync(cfg);
+		
+		//根据不同的通信接口 初始化不同的信息 
+		if (USE_SERIALPORT == LidarCommType)
+		{
+			lidar_serial.LidarLoadConfig(cfg);	//串口 
+		}
+		else if (USE_SOCKET == LidarCommType)
+		{		
+			lidar_udp.LidarLoadConfig(cfg);	//网络接口 
+			lidar_net_cfg.LidarLoadConfig(cfg);	//配置参数  
+		}
 	}
 }
 

@@ -49,6 +49,7 @@ namespace nvilidar
 			//其它接口 有需要可以调用 
 			std::string LidarGetSerialList();	
 			bool LidarSetNetConfig(std::string ip,std::string gateway,std::string mask);			//网络转接板或者带网络雷达参数配置 
+			void LidarReloadPara(Nvilidar_UserConfigTypeDef cfg);
 
 		private:
 			LidarCommTypeEnum		LidarCommType;	//comm type

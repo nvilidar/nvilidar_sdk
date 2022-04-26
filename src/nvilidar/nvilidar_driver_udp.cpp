@@ -24,6 +24,7 @@ namespace nvilidar
 	void LidarDriverUDP::LidarLoadConfig(Nvilidar_UserConfigTypeDef cfg)
 	{
 		lidar_cfg = cfg;                   //配置参数生效
+		lidar_filter.LidarFilterLoadPara(cfg);	//加载参数 进过滤信息 
 	}
 
 	//雷达是否连接
@@ -325,6 +326,10 @@ namespace nvilidar
 		static uint8_t   crc = 0;												//CRC校验值 
 		static Nvilidar_Protocol_NormalResponseData		normalResponseData;				//常规数据应答  
 
+		if (len > 1024)
+		{
+			return;
+		}
 		for (int j = 0; j < len; j++)
 		{
 			uint8_t byte = buf[j];
@@ -610,8 +615,6 @@ namespace nvilidar
 					checksum_speed_temp += (byte * 256);     //校验计算
 					pack_info.packageCheckSumCalc ^= checksum_speed_temp; //校验计算
 
-					static uint32_t pack_sum = 0;
-					static uint32_t temp_sum = 0;
 
 					if (pack_info.packageHas0CFirst)  //可能有0度
 					{
@@ -620,8 +623,6 @@ namespace nvilidar
 
 						if (byte & 0x80)
 						{
-							//printf("pack_sum:%d\n", pack_sum);
-							pack_sum = 0;
 
 							package_after_0c_index = 0;     //0位包  则将0度后的个数  清0
 
@@ -636,7 +637,6 @@ namespace nvilidar
 					}
 					else if (pack_info.packageHasTempFirst)    //是温度计算信息
 					{
-						pack_sum++;
 
 						pack_info.packageHasTempFirst = false;
 
@@ -649,7 +649,6 @@ namespace nvilidar
 					}
 					else
 					{
-						pack_sum++;
 
 						pack_info.packageHas0CAngle = false;
 						pack_info.packageHasTemp = false;
@@ -1537,6 +1536,11 @@ namespace nvilidar
 
 			if(0 == state)
 			{
+				if(lidar_cfg.filter_jump_enable)
+				{
+					//一圈数据  输出后 是否做其它数据 
+					lidar_filter.LidarJumpFilter(circleDataInfo.lidarCircleNodePoints);
+				}
 				//点集格式转换 
 				LidarSamplingData(circleDataInfo, scan);
 
@@ -1621,12 +1625,6 @@ namespace nvilidar
 				angle = 2 * M_PI - angle;
 			}
 
-			//-pi ~ pi
-			angle = fmod(fmod(angle, 2.0 * M_PI) + 2.0 * M_PI, 2.0 * M_PI);
-			if (angle > M_PI)
-			{
-				angle -= 2.0 * M_PI;
-			}
 
 			//忽略点（事先配置好哪个角度的范围）
 			if (lidar_cfg.ignore_array.size() != 0)
@@ -1644,6 +1642,13 @@ namespace nvilidar
 						break;
 					}
 				}
+			}
+			
+			//-pi ~ pi
+			angle = fmod(fmod(angle, 2.0 * M_PI) + 2.0 * M_PI, 2.0 * M_PI);
+			if (angle > M_PI)
+			{
+				angle -= 2.0 * M_PI;
 			}
 
 			//距离是否在有效范围内 
@@ -1705,7 +1710,7 @@ namespace nvilidar
 				{
 					//读串口接收数据长度 
 					recv_len = pObj->socket_udp.udpReadData(recv_data, 8192);
-					if(recv_len > 0)
+					if((recv_len > 0) && (recv_len <= 8192))
 					{
 						pObj->NormalDataUnpack(recv_data, recv_len);
 					}
@@ -1716,7 +1721,7 @@ namespace nvilidar
 				{
 					//读串口接收数据长度 
 					recv_len = pObj->socket_udp.udpReadData(recv_data, 8192);
-					if (recv_len > 0)
+					if((recv_len > 0) && (recv_len <= 8192))
 					{
 						pObj->PointDataUnpack(recv_data, recv_len);
 					}
@@ -1742,7 +1747,7 @@ namespace nvilidar
 				{
 					//读串口接收数据长度 
 					recv_len = pObj->socket_udp.udpReadData(recv_data, 8192);
-					if(recv_len > 0)
+					if((recv_len > 0) && (recv_len <= 8192))
 					{
 						pObj->NormalDataUnpack(recv_data, recv_len);
 					}
@@ -1753,7 +1758,7 @@ namespace nvilidar
 				{
 					//读串口接收数据长度 
 					recv_len = pObj->socket_udp.udpReadData(recv_data, 8192);
-					if(recv_len > 0)
+					if((recv_len > 0) && (recv_len <= 8192))
 					{
 						pObj->PointDataUnpack(recv_data, recv_len);
 					}
