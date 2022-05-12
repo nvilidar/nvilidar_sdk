@@ -5,7 +5,7 @@ How to build NVILIDAR SDK samples
 =====================================================================
     $ git clone https://gitee.com/nvilidar/nvilidar_sdk.git       
 	or
-	$ git clone https://github.com/nvilidar/nvilidar_sdk.git
+	$ git clone https://github.com/nvistar/nvistar-sdk.git
 
     $ cd sdk
     $ cd ..
