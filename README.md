@@ -39,11 +39,11 @@
 
 ## ROS Parameter Configuration
 ### 1. Lidar Support
-    current ros support 2 types of Lidar,include VP300 and VP350.ros can automatic lidar model recognition.
+    current ros support 2 types of Lidar,include ROC300 and VP350.ros can automatic lidar model recognition.
 
     if you want to use serialport,
 
-    The VP300 is a USB interface lidar, supporting various baud rates, bps is recommended.
+    The ROC300 is a USB interface lidar, supporting various baud rates, bps is recommended.
     VP350 is a serial interface lidar, supporting only 512000bps.
 
 
@@ -123,7 +123,7 @@ You should see NVILIDAR's scan result in the console:
 
 
 	lidar device info:
-	lidar name:VP300
+	lidar name:ROC300
 	lidar soft version:V1.13
 	lidar hard version:V2.0
 	lidar serialnumber:2022033011145555
