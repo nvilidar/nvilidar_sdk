@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "nvilidar_process.h"
+#include "mysignal.h"
 
 
 using namespace std;
@@ -63,9 +64,11 @@ int main()
 			{
 				for (size_t i = 0; i < scan.points.size(); i++)
 				{
-					//float angle = scan.points.at(i).angle;
-					//float dis = scan.points.at(i).range;
-					//printf("a:%f,d:%f\n", angle, dis);
+				#if 0
+					float angle = scan.points.at(i).angle;
+					float dis = scan.points.at(i).range;
+					printf("a:%f,d:%f\n", angle, dis);
+				#endif
 				}
 				nvilidar::console.message("Scan received[%llu]: %u ranges is [%f]Hz",
 					scan.stamp, (unsigned int)scan.points.size(),

@@ -7,7 +7,6 @@
 #include <vector>
 #include <stdint.h>
 #include "myconsole.h"
-#include "mysignal.h"
 #include "mytimer.h"
 
 //serial port 
