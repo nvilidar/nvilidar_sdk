@@ -247,9 +247,9 @@ namespace nvilidar
 		cfg.range_max = 64.0;
 		cfg.range_min = 0;
 		cfg.aim_speed = 10.0;				//10Hz
-		cfg.sampling_rate = 10;				//10k
+		cfg.sampling_rate = 10;			//10k
 		cfg.sensitive = false;				//default dont't use sensitive 
-		cfg.tailing_level = 6;				//tailing level 
+		cfg.tailing_level = 20;			//tailing level 
 		cfg.angle_offset_change_flag = false;	//change angle offset flag
 		cfg.angle_offset = 0.0;				//angle offset 
 		cfg.apd_change_flag = false;		//can change apd value,default false
@@ -285,7 +285,7 @@ namespace nvilidar
 		if (ports.empty())
 		{
 			nvilidar::console.show("Not Lidar was detected.");
-			return 0;
+			return port;
 		}
 		else if (1 == ports.size())
 		{
