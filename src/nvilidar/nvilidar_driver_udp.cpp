@@ -1728,6 +1728,7 @@ namespace nvilidar
 			state = WaitForSingleObject(_event_circle, timeout);
 			if (state == WAIT_OBJECT_0){
 				//data filter 
+				std::vector<Nvilidar_Node_Info> node_in;
 				node_in = circleDataInfo.lidarCircleNodePoints;
 				LidarFilter::instance()->LidarNoiseFilter(node_in,circleDataInfo.lidarCircleNodePoints);
 				//filter change 
